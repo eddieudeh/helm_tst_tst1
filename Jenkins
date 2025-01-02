@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Initialize Helm') {
+            steps {
+                sh 'helm version'
+                sh 'ls'
+            }
+        }
+
+        stage('Lint Helm Chart To Confirm') {
+            steps {
+                sh 'helm lint ./web-app'
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                sh '''
+                helm upgrade --install \
+                web-app-msg ./web-app 
+                '''
+            }
+        }
+
+        stage('Verify Deployment and Helm list') {
+            steps {
+                sh 'helm ls'
+                sh 'kubectl get pods'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful!, Nice Job!!'
+        }
+        failure {
+            echo 'Oooops Failed!. Check What is wrong'
+        }
+    }
+}
