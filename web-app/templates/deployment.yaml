@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: webapp-error
-          image: eddie/errormsg
+          image: eddieu/errormsg
           ports:
             - containerPort: 8080
